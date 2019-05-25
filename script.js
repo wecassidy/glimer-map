@@ -82,7 +82,7 @@ var networkChecks = new Map();
 // Set initial date
 var earliestDate;
 var today = new Date();
-document.getElementById("timeline-date").value = today.toISOString().substring(0, 10);
+dateInput.value = today.toISOString().substring(0, 10);
 
 // Important global variables
 var map;
@@ -100,11 +100,11 @@ function showHideAll(show) {
 
 function showDate() {
   if (document.getElementById("use-timeline").checked) {
-    document.getElementById("timeline-date").disabled = false;
-    document.getElementById("timeline-slider").disabled = false;
+    dateInput.disabled = false;
+    dateSlider.disabled = false;
   } else {
-    document.getElementById("timeline-date").disabled = true;
-    document.getElementById("timeline-slider").disabled = true;
+    dateInput.disabled = true;
+    dateSlider.disabled = true;
   }
 
   flatStationList.forEach(function (station, index, list) {
@@ -112,10 +112,10 @@ function showDate() {
   });
 }
 
-document.getElementById("timeline-slider").addEventListener("input", function () {
+dateSlider.addEventListener("input", function () {
   var setDate = new Date(earliestDate.valueOf() + (today - earliestDate) * this.value / 100.0);
-  document.getElementById("timeline-date").value = setDate.toISOString().substring(0, 10);
-  document.getElementById("timeline-date").dispatchEvent(new Event("change"));
+  dateInput.value = setDate.toISOString().substring(0, 10);
+  dateInput.dispatchEvent(new Event("change"));
 });
 
 function initMap() {
