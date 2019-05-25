@@ -1,0 +1,42 @@
+<!DOCTYLE html>
+<html>
+  <head>
+    <meta charset="utf8" />
+    <title>GLImER Stations</title>
+    <meta name="description" content="The objective of the project GLImER is to
+                conduct a global survey of lithospheric interfaces using converted teleseismic
+                body waves. Data from permanent and temporary seismic networks worldwide are
+                processed automatically to produce global maps of key interfaces (Moho,
+                intra-lithospheric interfaces, lithosphere-asthenosphere boundary). The seismic
+                results are interpreted in conjunction with constraints from complementary fields
+                of the earth sciences such as tectonics, geodynamics, petrology, and
+                geochemistry. This provides a unique view of how the properties of these
+                interfaces vary between different tectonic environments and thus how the
+                interfaces relate to geological processes at work in these various environments.
+                The results will be distributed to the scientific community in the form of data
+                products through a web-based application." />
+    <link rel="stylesheet" href="style.css" type="text/css"
+          media="screen" />
+    <meta name="author" content="Wesley Cassidy"/>
+  </head>
+  <body>
+    <div id="network-list">
+      <div id="network-header">Networks</div>
+      <div id="network-buttons">
+        Select <button id="select-all" type="button" onclick="showHideAll(true);">all</button> <button id="select-all" type="button" onclick="showHideAll(false);">none</button>
+      </div>
+    </div>
+    <div id="right-col">
+      <div id="map"></div>
+      <div id="timeline">
+        <label for="use-timeline"><input type="checkbox" id="use-timeline" onchange="showDate();">Limit to stations active on</label>
+        <input type="date" id="timeline-date" pattern="yyyy-mm-dd" disabled onchange="showDate();">
+        <input type="range" id="timeline-slider" value="100"
+               step="any" disabled>
+      </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClMhPg2wwywOd-UjB6RFyF1WAmJPTQ9KA&callback=initMap"
+            async defer></script>
+  </body>
+</html>

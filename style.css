@@ -1,0 +1,70 @@
+/*
+ * Author: Wesley Cassidy
+ * Date: 2019-05-25
+ */
+
+/* Layout */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: row;
+}
+
+#right-col {
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: column;
+}
+
+#map {
+  flex-grow: 1;
+}
+
+#timeline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#timeline-slider {
+  flex-grow: 1;
+}
+
+/* Styling */
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+#network-list {
+  overflow: auto;
+}
+
+#network-header {
+  font-size: 1.5rem;
+  padding: 10px;
+}
+
+#network-buttons {
+  position: sticky;
+  top: 0;
+  padding: 10px;
+  background: #fff;
+  border-bottom: 1px solid #999;
+}
+
+.network-selector {
+  display: block;
+  padding: 15px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #999;
+}
+
+#timeline {
+  padding: 10px;
+}
