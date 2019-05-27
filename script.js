@@ -112,6 +112,11 @@ function showDate() {
   });
 }
 
+dateInput.addEventListener("input", function () {
+  var newPos = (new Date(this.value).valueOf() - earliestDate.valueOf()) / (earliestDate.valueOf() + (today - earliestDate)) * 100;
+  dateSlider.value = newPos;
+});
+
 dateSlider.addEventListener("input", function () {
   var setDate = new Date(earliestDate.valueOf() + (today - earliestDate) * this.value / 100.0);
   dateInput.value = setDate.toISOString().substring(0, 10);
@@ -126,7 +131,7 @@ function initMap() {
 
   // Load stations
   var req = new XMLHttpRequest();
-  req.open("GET", "stations.csv");
+  req.open("GET", "./stations.csv");
   req.addEventListener("load", function () {
     // Process CSV to a 2D array
     dataTable = this.responseText.split("\n");
@@ -170,6 +175,10 @@ function initMap() {
         earliestDate = station.start;
       }
     });
+
+    // Set limits on date input
+    dateInput.min = earliestDate.toISOString().substring(0, 10);
+    dateInput.max = today.toISOString().substring(0, 10);
 
     dataTable.shift(); // Drop the header row
   });
