@@ -1,9 +1,26 @@
 // Author: Wesley Cassidy
-// Date: 2019-05-25
+// Date: 2019-05-29
 
 'use strict';
 
-function Station(data, checkbox, map) {
+// Generate icons lists
+var colours = ["blu", "grn", "ltblu", "orange", "pink", "purple", "red", "wht", "ylw"];
+var shapes = ["blank", "circle", "diamond", "square", "stars"];
+var permIcons = [];
+var permIconIndex = 0;
+var tempIcons = [];
+var tempIconIndex = 0;
+
+shapes.forEach(function (shape, index, list) {
+  colours.forEach(function (colour, index, list) {
+    permIcons.push({url: "./markers/" + colour + "_" + shape + ".png", scaledSize: {width: 32, height: 32}});
+    if (shape !== "blank" && colour !== "pink") {
+      tempIcons.push("./markers/" + colour + "_" + shape + "_lv.png");
+    }
+  });
+});
+
+function Station(data, checkbox, map, icon) {
   // Extract data to properties
   this.network = data[0];
   this.name = data[1];
@@ -12,15 +29,16 @@ function Station(data, checkbox, map) {
   this.pos = {lat: parseFloat(data[4]), lng: parseFloat(data[5])};
   this.elevation = data[6];
   this.frequency = data[7];
-  this.permanent = data[8] == "perm";
-  this.url1 = data[10];
-  this.url2 = data[11];
-  this.url3 = data[12];
+  this.permanent = data[8] === "perm";
+  this.url1 = data[9];
+  this.url2 = data[10];
+  this.url3 = data[11];
 
   // Add a marker to the map
   this.marker = new google.maps.Marker({
     position: this.pos,
-    map: map
+    map: map,
+    icon: icon
   });
 
   // Window builder
@@ -88,7 +106,7 @@ dateInput.value = today.toISOString().substring(0, 10);
 var map;
 var dataTable;
 var stations = {};
-var networks = [];
+var networkIcons = {};
 var flatStationList = [];
 
 function showHideAll(show) {
@@ -160,10 +178,21 @@ function initMap() {
         networkSelector.appendChild(checkbox);
         networkSelector.appendChild(networkText);
         netListElem.appendChild(networkSelector);
+
+        // Set icon for network
+        if (station[8] === "perm") {
+          networkIcons[station[0]] = permIcons[permIconIndex];
+          permIconIndex++;
+          permIconIndex %= permIcons.length;
+        } else {
+          networkIcons[station[0]] = tempIcons[tempIconIndex];
+          tempIconIndex++;
+          tempIconIndex %= tempIcons.length;
+        }
       }
 
       // Drop pins
-      var st = new Station(station, networkChecks.get(station[0]), map);
+      var st = new Station(station, networkChecks.get(station[0]), map, networkIcons[station[0]]);
       stations[station[0]].push(st);
       flatStationList.push(st);
     });
