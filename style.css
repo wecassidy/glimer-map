@@ -3,6 +3,9 @@
  * Date: 2019-05-25
  */
 
+/* Load fonts */
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
 /* Layout */
 html, body {
   height: 100%;
@@ -63,6 +66,8 @@ body {
   padding: 15px;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #999;
+
+  cursor: pointer;
 }
 
 #timeline {

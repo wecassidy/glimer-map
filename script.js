@@ -65,6 +65,12 @@ function Station(data, checkbox, map, icon) {
 <p align="left"><a href="' + that.url3 + '" target="_blank">Transverse P receiver functions</a></p> \
 </td> \
 </tr> \
+<tr> \
+<td> \
+<button class="select-one" type="button" onclick="showOne(\'' + that.network + '\');"> \
+Show only this network \
+</button> \
+</td> \
 </tbody> \
 </table>'
     });
@@ -112,6 +118,13 @@ var flatStationList = [];
 function showHideAll(show) {
   networkChecks.forEach(function (checkbox, network, map) {
     checkbox.checked = show;
+    checkbox.dispatchEvent(new Event("change"));
+  });
+}
+
+function showOne(showNet) {
+  networkChecks.forEach(function (checkbox, network, map) {
+    checkbox.checked = network === showNet;
     checkbox.dispatchEvent(new Event("change"));
   });
 }
