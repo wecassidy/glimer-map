@@ -4,17 +4,18 @@
 'use strict';
 
 // Generate icons lists
-var colours = ["blu", "grn", "ltblu", "orange", "pink", "purple", "red", "wht", "ylw"];
-var shapes = ["blank", "circle", "diamond", "square", "stars"];
 var permIcons = [];
 var permIconIndex = 0;
 var tempIcons = [];
 var tempIconIndex = 0;
 
+// Types of markers available in the Google Maps KML Paddle icon set
+var colours = ["blu", "grn", "ltblu", "orange", "pink", "purple", "red", "wht", "ylw"];
+var shapes = ["blank", "circle", "diamond", "square", "stars"];
 shapes.forEach(function (shape, index, list) {
   colours.forEach(function (colour, index, list) {
     permIcons.push({url: "./markers/" + colour + "_" + shape + ".png", scaledSize: {width: 32, height: 32}});
-    if (shape !== "blank" && colour !== "pink") {
+    if (shape !== "blank" && colour !== "pink") { // Small icons aren't available for blank and pink markers
       tempIcons.push("./markers/" + colour + "_" + shape + "_lv.png");
     }
   });
@@ -92,6 +93,10 @@ Show only this network \
       that.marker.setMap(map);
     }
   };
+  // The station listens for a change event on the checkbox for this
+  // network. As a consequence, the easiest way to update the
+  // visibility of all icons in a network is to trigger a change event
+  // on the checkbox.
   checkbox.addEventListener("change", this.updateVisibility);
 }
 
@@ -115,6 +120,7 @@ var stations = {};
 var networkIcons = {};
 var flatStationList = [];
 
+// Show or hide all the pins on the map
 function showHideAll(show) {
   networkChecks.forEach(function (checkbox, network, map) {
     checkbox.checked = show;
@@ -122,6 +128,7 @@ function showHideAll(show) {
   });
 }
 
+// Hide the pins from all networks except one
 function showOne(showNet) {
   networkChecks.forEach(function (checkbox, network, map) {
     checkbox.checked = network === showNet;
@@ -129,6 +136,8 @@ function showOne(showNet) {
   });
 }
 
+// Show or hide pins based on whether the station was active on the
+// currently entered date
 function showDate() {
   if (document.getElementById("use-timeline").checked) {
     dateInput.disabled = false;
@@ -143,17 +152,20 @@ function showDate() {
   });
 }
 
+// Sync the date slider with the date input
 dateInput.addEventListener("input", function () {
   var newPos = (new Date(this.value).valueOf() - earliestDate.valueOf()) / (earliestDate.valueOf() + (today - earliestDate)) * 100;
   dateSlider.value = newPos;
 });
 
+// Sync the date input with the date slider
 dateSlider.addEventListener("input", function () {
   var setDate = new Date(earliestDate.valueOf() + (today - earliestDate) * this.value / 100.0);
   dateInput.value = setDate.toISOString().substring(0, 10);
   dateInput.dispatchEvent(new Event("change"));
 });
 
+// Callback from when the Google Maps JS API loads
 function initMap() {
   map = new google.maps.Map(mapElem, {
     center: {lat: 0, lng: 0},
@@ -172,10 +184,11 @@ function initMap() {
 
       if (index == 0) {return;} // Skip the header row
 
-      // If we're in a new network, add it to the list
+      // Actions to take if we haven't run into this network before
       if (!(station[0] in stations)) {
-        stations[station[0]] = [];
+        stations[station[0]] = []; // Add an entry to the list of stations by network
 
+        // Create the checkbox for the network in the left pane
         var networkSelector = document.createElement("label");
         networkSelector.className = "network-selector";
         networkSelector.setAttribute("for", station[0]);
@@ -184,10 +197,11 @@ function initMap() {
         checkbox.id = station[0];
         checkbox.setAttribute("type", "checkbox");
         checkbox.setAttribute("checked", "");
-        networkChecks.set(station[0], checkbox);
+        networkChecks.set(station[0], checkbox); // Add the checkbox to the Map
 
         var networkText = document.createTextNode(station[0]);
 
+        // Build the element and add it to the DOM
         networkSelector.appendChild(checkbox);
         networkSelector.appendChild(networkText);
         netListElem.appendChild(networkSelector);
@@ -206,8 +220,8 @@ function initMap() {
 
       // Drop pins
       var st = new Station(station, networkChecks.get(station[0]), map, networkIcons[station[0]]);
-      stations[station[0]].push(st);
-      flatStationList.push(st);
+      stations[st.network].push(st); // Add to list of stations by network
+      flatStationList.push(st); // Also add to flat list
     });
 
     // Find the start date of the earliest station
