@@ -3,6 +3,11 @@
 
 'use strict';
 
+// Random number generator
+function rand(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
 // Generate icons lists
 var permIcons = [];
 var permIconIndex = 0;
@@ -168,8 +173,8 @@ dateSlider.addEventListener("input", function () {
 // Callback from when the Google Maps JS API loads
 function initMap() {
   map = new google.maps.Map(mapElem, {
-    center: {lat: 0, lng: 0},
-    zoom: 2
+    center: {lat: rand(-90, 90), lng: rand(-180, 180)},
+    zoom: rand(2, 5)
   });
 
   // Load stations
